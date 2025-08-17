@@ -170,6 +170,9 @@ def _create_sentinel_client(redis_params: dict[str, Any]) -> Union[redis.Redis, 
     if not dify_config.REDIS_SENTINELS:
         raise ValueError("REDIS_SENTINELS must be set when REDIS_USE_SENTINEL is True")
 
+    if not dify_config.REDIS_SENTINEL_SERVICE_NAME:
+        raise ValueError("REDIS_SENTINEL_SERVICE_NAME must be set when REDIS_USE_SENTINEL is True")
+
     sentinel_hosts = [(node.split(":")[0], int(node.split(":")[1])) for node in dify_config.REDIS_SENTINELS.split(",")]
 
     sentinel = Sentinel(
