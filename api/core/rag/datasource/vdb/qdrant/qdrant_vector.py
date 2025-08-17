@@ -147,6 +147,10 @@ class QdrantVector(BaseVector):
                 text_index_params = TextIndexParams(
                     type=TextIndexType.TEXT,
                     tokenizer=TokenizerType.MULTILINGUAL,
+                    stemmer=models.SnowballParams(
+                        type=models.Snowball.SNOWBALL,
+                        language=models.SnowballLanguage.RUSSIAN   # <- Russian stemming
+                    ),
                     min_token_len=2,
                     max_token_len=20,
                     lowercase=True,
@@ -403,6 +407,9 @@ class QdrantVector(BaseVector):
                         match=models.MatchAny(any=document_ids_filter),
                     )
                 )
+        current_app.logger.info(
+            f"Qdrant scroll request: collection_name={self._collection_name}, scroll_filter={scroll_filter}, limit={kwargs.get('top_k', 2)}"
+        )
         response = self._client.scroll(
             collection_name=self._collection_name,
             scroll_filter=scroll_filter,
