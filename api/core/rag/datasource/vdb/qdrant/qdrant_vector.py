@@ -147,12 +147,12 @@ class QdrantVector(BaseVector):
                     collection_name, Field.DOCUMENT_ID.value, field_schema=PayloadSchemaType.KEYWORD
                 )
                 # create full text index
-                print("Configure RUSSIAN stemmer")
+                current_app.logger.info("Configure RUSSIAN stemmer with WORD tokenizer")
 
                 text_index_params = TextIndexParams(
                     type=TextIndexType.TEXT,
-                    tokenizer=TokenizerType.MULTILINGUAL,
-                    stemmer=SnowballParams(type="showball", languages=[Language.RUSSIAN]),
+                    tokenizer=TokenizerType.WORD,
+                    stemmer=SnowballParams(type="snowball", language=Language.RUSSIAN),
                     min_token_len=2,
                     max_token_len=20,
                     lowercase=True,
@@ -409,11 +409,6 @@ class QdrantVector(BaseVector):
                         match=models.MatchAny(any=document_ids_filter),
                     )
                 )
-        # current_app.logger.info(
-        print(
-            f"Qdrant scroll request: collection_name={self._collection_name}, "
-            f"scroll_filter={scroll_filter}, limit={kwargs.get('top_k', 2)}"
-        )
         response = self._client.scroll(
             collection_name=self._collection_name,
             scroll_filter=scroll_filter,
