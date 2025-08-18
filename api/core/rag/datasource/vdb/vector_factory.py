@@ -40,6 +40,7 @@ class Vector:
 
     def _init_vector(self) -> BaseVector:
         vector_type = dify_config.VECTOR_STORE
+        print(f"vector_type: {vector_type}")
 
         if self._dataset.index_struct_dict:
             vector_type = self._dataset.index_struct_dict["type"]

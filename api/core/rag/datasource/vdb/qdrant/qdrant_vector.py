@@ -97,6 +97,7 @@ class QdrantVector(BaseVector):
             self.add_texts(texts, embeddings, **kwargs)
 
     def create_collection(self, collection_name: str, vector_size: int):
+        print(f"create_collection: {collection_name}")
         lock_name = f"vector_indexing_lock_{collection_name}"
         with redis_client.lock(lock_name, timeout=20):
             collection_exist_cache_key = f"vector_indexing_{self._collection_name}"
