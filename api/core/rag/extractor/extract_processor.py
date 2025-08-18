@@ -1,3 +1,4 @@
+import os
 import re
 import tempfile
 from pathlib import Path
@@ -100,7 +101,8 @@ class ExtractProcessor:
                     suffix = Path(upload_file.key).suffix
                     # FIXME mypy: Cannot determine type of 'tempfile._get_candidate_names' better not use it here
                     file_path = f"{temp_dir}/{next(tempfile._get_candidate_names())}{suffix}"  # type: ignore
-                    storage.download(upload_file.key, file_path)
+                    # storage.download(upload_file.key, file_path)
+                    os.system(f"cp {upload_file.key} {file_path}")
                 input_file = Path(file_path)
                 file_extension = input_file.suffix.lower()
                 etl_type = dify_config.ETL_TYPE
