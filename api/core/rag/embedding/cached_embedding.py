@@ -50,11 +50,14 @@ class CacheEmbedding(Embeddings):
                 model_schema = model_type_instance.get_model_schema(
                     self._model_instance.model, self._model_instance.credentials
                 )
-                max_chunks = (
-                    model_schema.model_properties[ModelPropertyKey.MAX_CHUNKS]
-                    if model_schema and ModelPropertyKey.MAX_CHUNKS in model_schema.model_properties
-                    else 1024
-                )
+                # max_chunks = (
+                #     model_schema.model_properties[ModelPropertyKey.MAX_CHUNKS]
+                #     if model_schema and ModelPropertyKey.MAX_CHUNKS in model_schema.model_properties
+                #     else 1024
+                # )
+                max_chunks = 1024
+                logger.info("max_chunks: %d, num texts: %d", max_chunks, len(embedding_queue_texts))
+
                 for i in range(0, len(embedding_queue_texts), max_chunks):
                     batch_texts = embedding_queue_texts[i : i + max_chunks]
                     batch_texts = ["search_document: " + text for text in batch_texts]

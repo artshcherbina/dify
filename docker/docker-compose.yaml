@@ -1301,6 +1301,21 @@ services:
     volumes:
       - ./volumes/unstructured:/app/data
 
+  frida-server:
+    image: frida-embeddings-server
+    restart: always
+    ports:
+      - "3333:3333"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    networks:
+      - default
+
 networks:
   # create a network between sandbox, api and ssrf_proxy, and can not access outside.
   ssrf_proxy_network:
