@@ -57,7 +57,9 @@ class CacheEmbedding(Embeddings):
                 )
                 for i in range(0, len(embedding_queue_texts), max_chunks):
                     batch_texts = embedding_queue_texts[i : i + max_chunks]
-
+                    batch_texts = ["search_document: " + text for text in batch_texts]
+                    # for text in batch_texts:
+                    #     print("embed_documents: " + text.replace("\n", "\\n"))
                     embedding_result = self._model_instance.invoke_text_embedding(
                         texts=batch_texts, user=self._user, input_type=EmbeddingInputType.DOCUMENT
                     )
@@ -111,6 +113,8 @@ class CacheEmbedding(Embeddings):
             decoded_embedding = np.frombuffer(base64.b64decode(embedding), dtype="float")
             return [float(x) for x in decoded_embedding]
         try:
+            text = "search_query: " + text
+            # print("embed_query: " + text.replace("\n", "\\n"))
             embedding_result = self._model_instance.invoke_text_embedding(
                 texts=[text], user=self._user, input_type=EmbeddingInputType.QUERY
             )
